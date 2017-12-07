@@ -21,7 +21,7 @@ Observer.prototype.listen = function (data, key, val) {
           return JSON.parse(JSON.stringify(val));
         },
         set: function(newVal) {
-            console.log('It changes from ', val, ' to ', newVal);
+            console.log(key+' changes from ', val, ' to ', newVal);
             console.log(newVal)
             console.log(subscriberList)
             childObj = new Observer(newVal);

@@ -4,9 +4,9 @@
 	else if(typeof define === 'function' && define.amd)
 		define([], factory);
 	else if(typeof exports === 'object')
-		exports["Mao"] = factory();
+		exports["MVVM"] = factory();
 	else
-		root["Mao"] = factory();
+		root["MVVM"] = factory();
 })(typeof self !== 'undefined' ? self : this, function() {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
@@ -70,36 +70,148 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ 	return __webpack_require__(__webpack_require__.s = 2);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
+/***/ (function(module, exports) {
+
+var g;
+
+// This works in non-strict mode
+g = (function() {
+	return this;
+})();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || Function("return this")() || (1,eval)("this");
+} catch(e) {
+	// This works if the window reference is available
+	if(typeof window === "object")
+		g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
+
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(global) {
+
+function Watcher(exp,vm,cb){
+    this.bind(exp,vm,cb)
+
+  }
+  
+  Watcher.prototype.bind = function(exp,vm,cb){
+  
+    var that = this
+    that.$vm = vm
+    global.subscriber = that
+    that.exp = exp
+    that.$cb = cb
+    that.val = that.$vm.data[exp]
+    global.subscriber = null
+  
+  }
+  
+  Watcher.prototype.update = function(){
+    
+      var that = this
+      that.val = that.$vm.data[that.exp]
+      console.log('Updated!',that.val)
+      if(that.$cb) that.$cb(that.val+"hey")
+    
+    }
+
+    module.exports = Watcher
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 2 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (immutable) */ __webpack_exports__["default"] = Mao;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_lodash__);
+/* harmony export (immutable) */ __webpack_exports__["default"] = MVVM;
+var _ = __webpack_require__(3);
+var Watcher = __webpack_require__(1)
+var Observer = __webpack_require__(5)
+var Compiler = __webpack_require__(7)
+
+function MVVM(options) {
+    this._init(options)
+}
+
+MVVM.prototype._init = function(options) {
+    this.data = options.data
+    this.dataObserver = new Observer(this.data)
+    this.compiler = new Compiler(this, options.el)
+        //observer.observe(this.data)
+}
+
+MVVM.prototype._observeCurrentData = function() {
+    this.dataObserver = new Observer(this.data)
+}
+
+// var option = {
+
+//     el: "#root",
+
+//     data: {
+//         arr: [1, 2, 3],
+//         obj: {
+//             obj_1: "1",
+//             obj_2: {
+//                 obj_2_1: "2_1",
+//                 obj_2_2: "2_2"
+//             }
+//         },
+//         str: "name",
+//         style: "color:black",
+//         style2: "",
+//         isShow: "false",
+//         message: "hh"
+//     }
+
+// }
+
+// var vm = new MVVM(option)
 
 
-  function component() {
-    var element = document.createElement('div');
+//w.bind("str",vm)
+//vm.data.name = "name"
+// vm.data.style = "strnew"
+// vm.data.message = "strne2w"
 
-    element.innerHTML = __WEBPACK_IMPORTED_MODULE_0_lodash___default.a.join(['Hello', 'webpack'], ' ');
+// //vm._observeCurrentData()
+// //var w2 = new Watcher()
+// //w2.bind("str1",vm)
+// //var w3 = new Watcher()
+// //w3.bind("str1",vm)
+// vm.data.str = { "strne222w": "22" }
 
-    return element;
-  }
+// function component() {
+//     var element = document.createElement('div');
+//     element.innerHTML = _.join(['Hello', 'webpack'], ' ');
+//     return element;
+// }
 
-  document.body.appendChild(component());
+// document.body.appendChild(component());
 
-function Mao(){
-      this.name = "a"
-  }
+
+    //console.log(document.querySelector("#root").firstChild); // "Hello world"
 
 /***/ }),
-/* 1 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, module) {var __WEBPACK_AMD_DEFINE_RESULT__;/**
@@ -17188,37 +17300,10 @@ function Mao(){
   }
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(3)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0), __webpack_require__(4)(module)))
 
 /***/ }),
-/* 2 */
-/***/ (function(module, exports) {
-
-var g;
-
-// This works in non-strict mode
-g = (function() {
-	return this;
-})();
-
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || Function("return this")() || (1,eval)("this");
-} catch(e) {
-	// This works if the window reference is available
-	if(typeof window === "object")
-		g = window;
-}
-
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-module.exports = g;
-
-
-/***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports) {
 
 module.exports = function(module) {
@@ -17244,6 +17329,187 @@ module.exports = function(module) {
 	return module;
 };
 
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(global) {var SubscriberList = __webpack_require__(6)
+
+Observer.prototype.observe = function (data) {
+    if (typeof data !== 'object') return;
+    Object.keys(data).forEach((key) => {
+        this.listen(data, key, data[key])
+        this.observe(data[key])
+    })
+}
+
+Observer.prototype.listen = function (data, key, val) {
+    var that = this
+    var isConfigurable = (data, key) => Object.getOwnPropertyDescriptor(data, key).configurable
+    if (!isConfigurable(data, key)) return
+    var subscriberList = new SubscriberList()
+    Object.defineProperty(data, key, {
+        enumerable: true,
+        configurable: false,
+        get: function() {
+          if(global.subscriber) subscriberList.add(global.subscriber)
+          return JSON.parse(JSON.stringify(val));
+        },
+        set: function(newVal) {
+            console.log(key+' changes from ', val, ' to ', newVal);
+            console.log(newVal)
+            console.log(subscriberList)
+            childObj = new Observer(newVal);
+            val = newVal;
+            subscriberList.notify()
+        }
+    });
+}
+
+function Observer(obj){
+
+    this.observe(obj)
+
+}
+
+module.exports = Observer
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports) {
+
+
+function SubscriberList(){
+    this._list=[]
+  }
+  
+  SubscriberList.prototype.add = function(subscriber){
+    this._list.push(subscriber)
+  }
+  
+  SubscriberList.prototype.notify = function(subscriber){
+    this._list.forEach((s)=>s.update())
+  }
+
+  module.exports = SubscriberList
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+//const jsdom = require("jsdom");
+var Watcher = __webpack_require__(1)
+// const { JSDOM } = jsdom;
+// const dom = new JSDOM(`    <div id="root">  
+// <input v-model="message"/>  
+// <p v-bind:class="style">您输入的内容是{{message}}  {{message}} </p>  
+// <div v-bind:class="style2" v-show="isShow"></div>  
+// </div>  `);
+// const document = dom.window.document
+
+
+function Compiler(vm, el) {
+    this.$vm = vm
+    console.log(vm)
+    this.$el = document.querySelector(el)
+    this.$fragment = this.toFragment(this.$el)
+    this.init()
+    this.$el.appendChild(this.$fragment);
+}
+
+
+Compiler.prototype = {
+    toFragment: function(el) {
+
+        var fragment = document.createDocumentFragment(),
+            child;
+
+        while (child = el.firstChild) {
+            fragment.appendChild(child);
+        }
+
+        console.log(fragment)
+
+        return fragment;
+    },
+    init: function() {
+        this.compileElement(this.$fragment);
+    },
+    compileElement: function(el) {
+        var childNodes = el.childNodes,
+            vm = this.$vm;
+        [].slice.call(childNodes).forEach((node) => {
+
+            var text = node.textContent;
+            var reg = /\{\{(.*)\}\}/; // 表达式文本  
+            if (node.nodeType == 1) { //普通标签  
+                this.compileAttrs(node);
+            } else if (node.nodeType == 3 && reg.test(text)) { //文本节点 #text  
+                this.compileText(node);
+            }
+            if (node.childNodes && node.childNodes.length > 0) {
+                this.compileElement(node); //递归调用  
+            }
+        })
+    },
+    compileText: function(node) { //当然这里需要匹配所有的{{exp}}  为每个不同的exp生成一个Watcher  
+        var text = node.textContent;
+        var reg = /\{\{([a-z|1-9|_]+)\}\}/g;
+        reg.test(text);
+        var exp = RegExp.$1;
+        console.log("Watch new!",exp)
+        new Watcher(exp, this.$vm, function(value) {
+            node.textContent = text.replace(reg, value);
+        });
+    },
+    compileAttrs: function(node) {
+        var complieUtils = this.complieUtils;
+        var attrs = node.attributes,
+            me = this;
+        [].slice.call(attrs).forEach(function(attr) {
+            if (me.isDirective(attr)) {
+                var dir = attr.name.substring(2).split(':')[0];
+                var exp = attr.value;
+                complieUtils[dir + '_compile'].call(me, node, attr, exp);
+
+            }
+        })
+    },
+    isDirective: function(attr) { //通过name  value获取属性的键值  
+        return /v-*/.test(attr.name); //判断属性名是否以v-开头  
+    },
+    complieUtils: {
+        model_compile: function(node, attr, exp) {
+            node.addEventListener("keyup", (e) => {
+                this.$vm.data[exp] = e.target.value;
+            });
+            node.removeAttribute(attr.name);
+            new Watcher(exp, this.$vm, function(value) {
+                node.value = value;
+            });
+        },
+        bind_compile: function(node, attr, exp) {
+            var attribute = attr.name.split(':')[1];
+            node.removeAttribute(attr.name);
+            new Watcher(exp, this.$vm, function(value) {
+                node.setAttribute(attribute, value);
+            });
+        },
+        show_compile: function(node, attr, exp) {
+            node.removeAttribute(attr.name);
+            new Watcher(exp, this.$vm, function(value) {
+                node.style.visibility = value ? 'visible' : 'hidden';
+            });
+        }
+    }
+}
+
+
+
+module.exports = Compiler
 
 /***/ })
 /******/ ])["default"];

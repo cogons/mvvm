@@ -5,7 +5,35 @@
       <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     </head>
     <body>
+        <div id="root">  
+            <input v-model="message"/>  
+            <p v-bind:class="style">您输入的内容是{{message}}  {{message}} </p>  
+            <div v-bind:class="style2" v-show="isShow"></div>  
+            </div>
         <script src="dist/bundle.js"></script>
-    </body>
+        <script>new MVVM(
+          {
+
+    el: "#root",
+
+    data: {
+        arr: [1, 2, 3],
+        obj: {
+            obj_1: "1",
+            obj_2: {
+                obj_2_1: "2_1",
+                obj_2_2: "2_2"
+            }
+        },
+        str: "name",
+        style: "color:black",
+        style2: "",
+        isShow: "false",
+        message: "hh"
+    }
+
+
+        })</script>
+      </body>
   </html>
   
